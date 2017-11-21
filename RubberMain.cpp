@@ -4,6 +4,7 @@
 //CISP 400 Tues/Weds
 #include "RubberArray.h"
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 int main()
