@@ -9,34 +9,27 @@ using namespace std;
 
 int main()
 {
-	RubberArray<int> newvec(100);
+	RubberArray<char> newvec(0);
 	//RubberArray<int> newvec1(0);
 
 	try {
-		for (unsigned i = 0; i<50; ++i)
-		{
-			newvec.append(i);
-			cout << newvec << endl;
-    }
+   
+  for (unsigned i = 'A'; i < 'A' + 26; ++i)
+	{
+		newvec.append(i);
+	}
 
-		for (unsigned i = 50; i>0; --i)
-		{
-			newvec.remove();
-			cout << newvec << endl;
-    }
-		//newvec.add(10000);
-		//newvec.add(3,55);
-		//cout << "Number of items in array: ";
-		//cout << newvec.length();
-		//cout << endl << endl;
+	ofstream fout ("test.txt" , ios::out | ios::binary);
+	newvec.write(fout);
+	fout.close();
 
-		//cout << newvec << endl;
-    //newvec.remove();
-		//cout << newvec << endl;
 
-   // newvec1 = newvec(0,10);
+	ifstream fin("test.txt" , ios::in | ios::binary);
+	RubberArray<char> new1(0);
+	new1.read(fin);
+	cout << new1 << endl;
 
-		//cout << newvec1;
+	cout << newvec << endl;
 
 	}catch(unsigned a)
 	{

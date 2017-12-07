@@ -25,35 +25,39 @@ public:
 
 	~RubberArray();
 
-  RubberArray<T>& operator=(const RubberArray&);
+	RubberArray<T>& operator=(const RubberArray&);
 
-  template<typename OS>
-	friend ostream& operator<< ( ostream&, const RubberArray<OS>& R );
+	template<typename OS>
+		friend ostream& operator<< ( ostream&, const RubberArray<OS>& R );
 
-  template <typename OS>
-  friend ostream& operator<< ( ostream&, const RubberArray<OS>* );
+	template <typename OS>
+		friend ostream& operator<< ( ostream&, const RubberArray<OS>* );
 
-  T& operator[] ( int Vindex );
+	T& operator[] ( int Vindex );
 
 	const T& operator[] ( int Vindex ) const;
 
-  RubberArray operator( ) ( int Vfirst, int Vlast ) const;
+	RubberArray operator( ) ( int Vfirst, int Vlast ) const;
 
-  void append(const T& item);
+	void append(const T& item);
 
-  void append ( const RubberArray<T>& );
+	void append ( const RubberArray<T>& );
 
-  unsigned length ( ) const;
+	unsigned length ( ) const;
 
-  void add ( int Vindex, const T& );
+	void add ( int Vindex, const T& );
 
-  void add ( const T& );
+	void add ( const T& );
 
-  void remove ( );
+	void remove ( );
 
-  void remove ( int Vindex );
+	void remove ( int Vindex );
 
-  void remove ( int Vfirst, int Vlast );
+	void remove ( int Vfirst, int Vlast );
+
+  void write (ofstream& of) const;
+
+	void read (ifstream& ifs);
 
 };
 #endif
@@ -115,31 +119,31 @@ RubberArray<T>& RubberArray<T>::operator=(const RubberArray<T>& R)
 	return *this;
 }
 
-template <typename OS>
+	template <typename OS>
 ostream& operator<< ( ostream& os, const RubberArray<OS>& R )
 {
 
-  cout << "Number of items in array: " << R._len << endl;
+	cout << "Number of items in array: " << R._len << endl;
 	cout << "Number of allocated spaces:" << R._alloc << endl;
 	cout << "Virtual index of first item:" << R._Vindex << endl;
-	
+
 	if (R._len != 0)
 	{
 		os << R._Array[0];
 		for (unsigned i = 1; i < R._len; ++i)
 			os << ", " << R._Array[i];
-  }
+	}
 	return os;
 }
 
-template <class OS>
+	template <class OS>
 ostream& operator<< (ostream& os, const RubberArray<OS>* R)
 {
 	os << (*R);
 	return os;
 }
 
-template <class T>
+	template <class T>
 T& RubberArray<T>::operator[] (int Vindex)
 {
 	int Aindex = Vindex - _Vindex;
@@ -157,7 +161,7 @@ T& RubberArray<T>::operator[] (int Vindex)
 template <class T>
 const T& RubberArray<T>::operator[] (int Vindex) const
 {
- 	int Aindex = Vindex - _Vindex;
+	int Aindex = Vindex - _Vindex;
 
 	if (Aindex < 0 || Aindex >= _len)
 	{
@@ -167,7 +171,7 @@ const T& RubberArray<T>::operator[] (int Vindex) const
 	}
 
 	return _Array[Aindex];
- 
+
 }
 
 template <class T>
@@ -177,9 +181,9 @@ RubberArray<T> RubberArray<T>::operator()(int Vfirst, int Vlast) const
 	int tmpLast = Vlast - _Vindex;
 	int newSize = (tmpLast - tmpFirst) - 1;
 
-  if (tmpFirst < 0)
+	if (tmpFirst < 0)
 	{
-    throw unsigned(999); // THROW 999 IF VFIRST IS OUT OF BOUNDS
+		throw unsigned(999); // THROW 999 IF VFIRST IS OUT OF BOUNDS
 	} else if (tmpLast<0)
 	{
 		throw unsigned(998); // THROW 998 IF VLAST IS OUT OF BOUNDS 
@@ -191,7 +195,7 @@ RubberArray<T> RubberArray<T>::operator()(int Vfirst, int Vlast) const
 	RubberArray<T> tmpVec;
 	for (unsigned i = 0; i < newSize; ++i)
 	{
-    tmpVec.append(_Array[tmpFirst + i]);
+		tmpVec.append(_Array[tmpFirst + i]);
 	}
 
 	return tmpVec;
@@ -205,7 +209,7 @@ void RubberArray<T>::append(const T& item)
 		_alloc = _alloc *2+1;
 		T* temp = new T[_alloc];
 		for (unsigned i = 0; i<_len; ++i)
-		  temp[i] = _Array[i];
+			temp[i] = _Array[i];
 		if (_len != 0)
 			delete [] _Array;
 		_Array = temp;
@@ -214,7 +218,7 @@ void RubberArray<T>::append(const T& item)
 
 }
 
-  template <class T>
+	template <class T>
 void RubberArray<T>::append(const RubberArray<T>& V)
 {
 	for (unsigned i = 0; i<V._len; ++i)
@@ -227,39 +231,11 @@ unsigned RubberArray<T>::length() const
 	return _len;
 }
 
-/*template <class T>
-void RubberArray<T>::write (ofstream& inf) const
-{
-	if (inf)
-	{
-		outf.write(reinterpret_cast<const char*>(&_Vindex), sizeof(_vindex) );
-		outf.write(reinterpret_cast<const char*>(&_len), sizeof(_lin) );
-		outf.write(reinterpret_cast<const char*>(_Array),_len*sizeof(T) );
-	}
-}
-
 	template <class T>
-void RubberArray<T>::read (ofstream& inf)
-{
-	if (inf)
-	{
-		inf.read(reinterpret_cast<const char*>(&_vindex), sizeof(_vindex) );
-		inf.read(reinterpret_cast<const char*>(&_len), sizeof(_lin) );
-		T* temp = new T[_len];
-		inf.read(reinterpret_cast<char*>(temp), _len*sizeof(T));
-		RubberArray<T> RA(temp,_len,_vindex);
-		*this = RA;
-		delete [] temp;
-	}
-
-}
-*/
-
-template <class T>
 void RubberArray<T>::add(int Vindex, const T& V)
 {
-  int Aindex = Vindex - _Vindex;
-  if (Aindex < 0 || Aindex >= _len)
+	int Aindex = Vindex - _Vindex;
+	if (Aindex < 0 || Aindex >= _len)
 	{
 		if (Aindex < 0)
 			throw unsigned(100 + _Vindex);
@@ -269,26 +245,26 @@ void RubberArray<T>::add(int Vindex, const T& V)
 	_Array[Aindex] = V;
 }
 
-template <class T>
+	template <class T>
 void RubberArray<T>::add(const T& V)
 {
 	add (_Vindex,V);
 }
 
-template <class T>
+	template <class T>
 void RubberArray<T>::remove()
 {
-  remove(_Vindex +_len -1);
+	remove(_Vindex +_len -1);
 }  
 
-template <class T>
+	template <class T>
 void RubberArray<T>::remove(int Vindex)
 {
-  int Aindex = Vindex - _Vindex;
+	int Aindex = Vindex - _Vindex;
 
 	if (Aindex < 0 || Aindex >= _len)
 	{
-    throw unsigned(200);
+		throw unsigned(200);
 	}
 
 	RubberArray<T> tmp(_Vindex);
@@ -297,13 +273,49 @@ void RubberArray<T>::remove(int Vindex)
 		if (i != Aindex)
 			tmp.append(_Array[i]);
 	}
-
 	*this = tmp;
 }
 
-template <class T>
+	template <class T>
 void RubberArray<T>::remove(int Vfirst, int Vlast)
 {
-  for (Vfirst; Vfirst < Vlast; ++Vfirst)
-		remove(Vfirst);
+	if (Vfirst >= _Vindex && Vlast <= _len + _Vindex)
+	{
+		for (int i = Vfirst; i < Vlast; ++i)
+			remove(Vfirst);
+
+	} else throw unsigned(300);
 }
+
+
+template <class T>
+void RubberArray<T>::write (ofstream& outf) const
+{
+	if (outf)
+	{
+	outf.write(reinterpret_cast<const char*>(&_Vindex), sizeof(_Vindex) );
+	outf.write(reinterpret_cast<const char*>(&_len), sizeof(_len) );
+	outf.write(reinterpret_cast<const char*>(_Array),_len*sizeof(T) );
+	}
+}
+
+template <class T>
+void RubberArray<T>::read (ifstream& inf)
+{
+	if (inf)
+	{
+	inf.read(reinterpret_cast<char*>(&_Vindex), sizeof(_Vindex) );
+	inf.read(reinterpret_cast<char*>(&_len), sizeof(_len) );
+	T* temp;
+
+	temp = new T[_len];
+
+	inf.read(reinterpret_cast<char*>(temp), _len*sizeof(T));
+	RubberArray<T> RA(temp,_len,_Vindex);
+ *this = RA;
+ delete [] temp;
+}
+
+}
+
+
